@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/josephyi/viktor.svg?branch=master)](https://travis-ci.org/josephyi/viktor)
+
 # Viktor
 
 **TODO: Add description**
