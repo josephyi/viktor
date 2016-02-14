@@ -20,7 +20,10 @@ defmodule Viktor.Mixfile do
   end
 
   defp deps do
-    [ {:httpoison, "~> 0.8.0"}, { :poison, "~> 2.0"} ]
+    [ {:httpoison, "~> 0.8.0"},
+      {:poison, "~> 2.0"},
+      {:inch_ex, only: :docs}
+    ]
   end
 
   defp description do
