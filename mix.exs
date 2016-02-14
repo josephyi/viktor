@@ -8,6 +8,7 @@ defmodule Viktor.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps,
+     description: description,
      package: package]
   end
 
@@ -22,12 +23,17 @@ defmodule Viktor.Mixfile do
     [ {:httpoison, "~> 0.8.0"}, { :poison, "~> 2.0"} ]
   end
 
+  defp description do
+    """
+    Client API wrapper for League of Legends API.
+    """
+  end
+
   defp package do
     [
       files: ["lib", "mix.exs", "README.md", "LICENSE*"],
       maintainers: ["Joseph Yi"],
       licenses: ["MIT"],
-      description: "Client wrapper for Riot Games' League of Legends API.",
       links: %{"GitHub" => "https://github.com/josephyi/viktor"}
     ]
   end
