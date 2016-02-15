@@ -42,15 +42,15 @@ iex -S mix
 
 ## Usage
 
-1. Set the `RIOT_API_KEY` environment variable.
+Set the `RIOT_API_KEY` environment variable.
 
 ```console
 export RIOT_API_KEY=whatever_key_rito_assigned_you
 ```
 
-2. Viktor uses Elixir's [Agent] to manage the API key between requests, so you must call `start_link/0` to begin:
+Viktor uses Elixir's [Agent] to manage the API key between requests, so you must call `start_link/0`.
 
-If `RIOT_API_KEY` is set:
+If `RIOT_API_KEY` is set
 
 ```elixir
 Viktor.start_link
