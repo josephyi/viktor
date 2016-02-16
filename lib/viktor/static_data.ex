@@ -14,7 +14,7 @@ defmodule Viktor.StaticData do
   end
 
   def item(region, id, locale, version, item_list_data) do
-    request(region, "/champion/#{id}", [locale: locale, version: version, itemListData: item_list_data])
+    request(region, "/champion/#{id}", [locale: locale, version: version, itemData: item_data])
   end
 
   def language_strings(region, locale, version) do
@@ -25,7 +25,35 @@ defmodule Viktor.StaticData do
     request(region, "/map", [locale: locale, version: version]
   end
 
-  def request(region, action, params \\ []) do
+  def mastery(region, locale, version, mastery_list_data) do
+    request(region, "/mastery", [locale: locale, version: version, masteryListData: mastery_list_data]
+  end
+
+  def mastery(region, id, locale, version, mastery_data) do
+    request(region, "/mastery/#{id}", [locale: locale, version: version, masteryData: mastery_data]
+  end
+
+  def realm(region), do: request(region, "/realm")
+
+  def rune(region, locale, version, rune_list_data) do
+    request(region, "/rune", [locale: locale, version: version, runeListData: rune_list_data]
+  end
+
+  def rune(region, id, locale, version, rune_data) do
+    request(region, "/rune/#{id}", [locale: locale, version: version, runeData: rune_data]
+  end
+
+  def summoner_spell(region, locale, version, data_by_id, spell_data) do
+    request(region, "/summoner-spell", [locale: locale, version: version, dataById: data_by_id, spellData: spell_data])
+  end
+
+  def summoner_spell(region, id, locale, version, spell_data) do
+    request(region, "/summoner-spell/#{id}", [locale: locale, version: version, spellData: spell_data])
+  end
+
+  def version(region), do: request(region, "/versions")
+
+  defp request(region, action, params \\ []) do
     region_info(region) |> url(action) |> add_params(params) |> get
   end
 
