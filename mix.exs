@@ -12,9 +12,6 @@ defmodule Viktor.Mixfile do
      package: package]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger, :httpoison, :poison]]
   end
@@ -22,7 +19,8 @@ defmodule Viktor.Mixfile do
   defp deps do
     [ {:httpoison, "~> 0.8.0"},
       {:poison, "~> 2.0"},
-      {:inch_ex, only: :docs}
+      {:inch_ex, only: :docs},
+      {:ex_doc, "~> 0.11", only: :dev}
     ]
   end
 
