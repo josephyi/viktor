@@ -20,8 +20,8 @@ defmodule Viktor.Mixfile do
     [ {:httpoison, "~> 0.8.0"},
       {:poison, "~> 2.0"},
       {:inch_ex, only: :docs},
-      {:ex_doc, "~> 0.11", only: :docs},
-      {:earmark, "~> 0.2", only: :docs}
+      {:ex_doc, "~> 0.11", only: :dev},
+      {:earmark, "~> 0.2", only: :dev}
     ]
   end
 
