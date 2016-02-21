@@ -1,6 +1,5 @@
 defmodule Viktor.Base do
   alias Viktor.HTTP
-  alias Viktor.URL
 
   @region_info %{
             br: [region: "br", platform_id: "BR1", host: "br.api.pvp.net"],
@@ -30,13 +29,15 @@ defmodule Viktor.Base do
     if region_data, do: {:ok, region_data}, else: {:error, "Region not found: :#{region_atom}"}
   end
 
+  def regional_endpoint(region) when is_binary(region), do: region_info(region) |> regional_endpoint
   def regional_endpoint({:ok, region_data}), do: "https://#{region_data[:host]}/api/lol/#{region_data[:region]}"
 
-  def get(url), do: HTTP.request!(:get, url, "", [], []) |> HTTP.process_response
-  def get(path, params) do
-    url = add_params_to_url(path, params)
-
+  def request(region, path), do: request(region, path, {:with_key, []})
+  def request(region, path, {:with_key, params}) do
+     (regional_endpoint(region) <> path) |> add_params(params) |> get
   end
+
+  def get(url), do: HTTP.request!(:get, url, "", [], []) |> HTTP.process_response
 
   def add_params(url, params, with_key \\ true) do
     if with_key do
