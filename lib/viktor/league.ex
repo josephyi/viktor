@@ -11,8 +11,8 @@ defmodule Viktor.League do
 
   def by_team_entry(region, team_ids), do: request(region, "#{@league_path}/by-team/#{team_ids}/entry")
 
-  def challenger(region, type), do: request(region, "#{@league_path}/challenger", [type: type])
+  def challenger(region, type), do: request(region, "#{@league_path}/challenger", {:with_key, type: type})
 
-  def master(region, type), do: request(region, "#{@league_path}/master", [type: type])
+  def master(region, type), do: request(region, "#{@league_path}/master", {:with_key, type: type})
 
 end

@@ -1,5 +1,17 @@
 defmodule Viktor.FeaturedGames do
   import Viktor.Base
+  @moduledoc """
+  Wrapper for Featured Games endpoint.
+  """
+
+  @doc """
+  Get current game information for the given summoner ID.
+
+  ## Examples
+  ```elixir
+  featured_games = Viktor.FeaturedGames.featured_games("na")
+  ```
+  """
   def featured_games(region) do
     region_info(region) |> url |> add_params([]) |> get
   end

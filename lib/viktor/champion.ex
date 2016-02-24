@@ -5,22 +5,22 @@ defmodule Viktor.Champion do
   """
   @champion_path "/v1.2/champion"
 
-
   def champion(region, arg \\ nil)
 
   @doc """
-  Champion by id.
+  Retrieve champion by ID.
 
   ## Examples
-
-      champion = Viktor.Champion.champion("na", 1)
+  ```elixir
+  champion = Viktor.Champion.champion("na", 1)
+  ```
   """
   def champion(region, id) when is_integer(id) do
     request(region, "#{@champion_path}/#{id}")
   end
 
   @doc """
-  Champion list.
+  Retrieve all champions.
 
   ## Examples
   All Champions
