@@ -18,6 +18,14 @@ defmodule Viktor do
     Agent.start_link(fn -> api_key end, name: __MODULE__)
   end
 
+  @doc """
+  API Key
+
+  ## Examples
+  ```elixir
+  Viktor.api_key
+  ```
+  """
   def api_key do
     Agent.get(__MODULE__, fn(state) -> state end)
   end
@@ -38,8 +46,8 @@ defmodule Viktor do
   ## Examples
   All Champions
   ```elixir
-  all_champions = Viktor.Champion.champion("na")
-  free_champions = Viktor.Champion.champion("na", true)
+  all_champions = Viktor.champion("na")
+  free_champions = Viktor.champion("na", true)
   ```
   """
   def champions(region, free_to_play), do: Champion.champion(region, free_to_play)
@@ -52,7 +60,7 @@ defmodule Viktor do
   mastery_score = Viktor.mastery_score("na", 21066)
   ```
   """
-  def mastery_score(region, summoner_id), do: ChampionMastery.score(region, summoner_id)
+  defdelegate mastery_score(region, summoner_id), to: ChampionMastery, as: :score
 
   @doc """
   Gets all champion masteries for a summoner.
@@ -62,7 +70,7 @@ defmodule Viktor do
   masteries = Viktor.champion_masteries("na", 21066)
   ```
   """
-  def champion_masteries(region, summoner_id), do: ChampionMastery.champions(region, summoner_id)
+  defdelegate champion_masteries(region, summoner_id), to: ChampionMastery, as: :champions
 
   @doc """
   Gets all champion masteries for a summoner.
@@ -72,7 +80,18 @@ defmodule Viktor do
   mastery = Viktor.champion_mastery("na", 21066, 1)
   ```
   """
-  def champion_mastery(region, summoner_id, champion_id), do: ChampionMastery.champion(region, summoner_id, champion_id)
+  defdelegate champion_mastery(region, summoner_id, champion_id), to: ChampionMastery, as: :champion
+
+  @doc """
+  Get specified number of top champion mastery entries sorted by number of champion points descending.
+
+  ## Examples
+  ```elixir
+  default_is_3 = Viktor.top_champion_masteries("na", 21066)
+  top_10 = Viktor.top_champion_masteries("na", 21066, 10)
+  ```
+  """
+  defdelegate top_champion_masteries(region, summoner_id), to: ChampionMastery, as: :topchampions
 
   @doc """
   Get current game information for the given summoner ID.
@@ -80,29 +99,112 @@ defmodule Viktor do
   ## Examples
   ```elixir
   current_game = Viktor.current_game("na", 21066)
+  ```
   """
-  def current_game(region, summoner_id), do: CurrentGame.current_game(region, summoner_id)
+  defdelegate current_game(region, summoner_id), to: CurrentGame
 
   @doc """
-  Get list of featured_games
+  Get list of featured_games.
 
   ## Examples
   ```elixir
   featured_games = Viktor.featured_games("na")
+  ```
   """
-  def featured_games(region), do: FeaturedGames.featured_games(region)
-  def recent_games(region, summoner_id), do: Game.recent(region, summoner_id)
+  defdelegate featured_games(region), to: FeaturedGames
 
-  def challenger_league(region, type), do: League.challenger(region, type)
-  def master_league(region, type), do: League.master(region, type)
-  def leagues(region, summoner_ids), do: League.by_summoner(region, summoner_ids)
-  def league_entries(region, summoner_ids), do: League.by_summoner_entry(region, summoner_ids)
-  def team_leagues(region, team_ids), do: League.by_team(region, team_ids)
-  def team_league_entries(region, team_ids), do: League.by_team_entry(region, team_ids)
+  @doc """
+  Get recent games by summoner ID.
 
-  def match(region, match_id, include_timeline \\ nil), do: Match.match(region, match_id, include_timeline)
+  ## Examples
+  ```elixir
+  recent_games = Viktor.recent_games("na", 21066)
+  ```
+  """
+  defdelegate recent_games(region, summoner_id), to: Game, as: :recent
 
-  def match_list(region, summoner_id, params \\ []), do: MatchList.match_list(region, summoner_id, params)
+  @doc """
+  Get challenger tier leagues.
+
+  ## Examples
+  ```elixir
+  challenger_league = Viktor.challenger_league("na", "RANKED_SOLO_5x5")
+  ```
+  """
+  defdelegate challenger_league(region, type), to: League, as: :challenger
+
+  @doc """
+  Get master tier leagues.
+
+  ## Examples
+  ```elixir
+  master_league = Viktor.master_league("na", "RANKED_SOLO_5x5")
+  ```
+  """
+  defdelegate master_league(region, type), to: League, as: :master
+
+  @doc """
+  Get leagues mapped by summoner ID for a given list of summoner IDs.
+
+  ## Examples
+  ```elixir
+  leagues = Viktor.leagues("na", "21066")
+  ```
+  """
+  defdelegate leagues(region, summoner_ids), to: League, as: :by_summoner
+
+  @doc """
+  Get league entries mapped by summoner ID for a given list of summoner IDs.
+
+  ## Examples
+  ```elixir
+  league_entries = Viktor.league_entries("na", "21066")
+  ```
+  """
+  defdelegate league_entries(region, summoner_ids), to: League, as: :by_summoner_entry
+
+  @doc """
+  Get leagues mapped by team ID for a given list of team IDs.
+
+  ## Examples
+  ```elixir
+  team_leagues = Viktor.team_leagues("na", "TEAM-fa073ee0-51ca-11e4-82cc-782bcb4d0bb2")
+  ```
+  """
+  defdelegate team_leagues(region, team_ids), to: League, as: :by_team
+
+  @doc """
+  Get league entries mapped by team ID for a given list of team IDs.
+
+  ## Examples
+  ```elixir
+  team_league_entries = Viktor.team_league_entries("na", "TEAM-fa073ee0-51ca-11e4-82cc-782bcb4d0bb2")
+  ```
+  """
+  defdelegate team_league_entries(region, team_ids), to: League, as: :by_team_entry
+
+  @doc """
+  Retrieve match by match ID.
+
+  ## Examples
+  ```elixir
+  match = Viktor.match("na", 2077473238)
+  ```
+  """
+  defdelegate match(region, match_id), to: Match
+
+  @doc """
+  Retrieve match by match ID.
+
+  ## Examples
+  ```elixir
+  match = Viktor.match("na", 2077473238, true)
+  ```
+  """
+  defdelegate match(region, match_id, include_timeline), to: Match
+
+  defdelegate match_list(region, summoner_id), to: MatchList
+  defdelegate match_list(region, summoner_id, params), to: MatchList
 
 
 end
