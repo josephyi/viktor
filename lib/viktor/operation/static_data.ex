@@ -1,4 +1,4 @@
-defmodule Viktor.StaticData do
+defmodule Viktor.Operation.StaticData do
   import Viktor.Base
   @moduledoc false
 

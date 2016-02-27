@@ -1,4 +1,4 @@
-defmodule Viktor.FeaturedGames do
+defmodule Viktor.Operation.FeaturedGames do
   import Viktor.Base
   @moduledoc """
   Wrapper for Featured Games endpoint.
@@ -9,7 +9,7 @@ defmodule Viktor.FeaturedGames do
 
   ## Examples
   ```elixir
-  featured_games = Viktor.FeaturedGames.featured_games("na")
+  featured_games = Viktor.Operation.FeaturedGames.featured_games("na")
   ```
   """
   def featured_games(region) do

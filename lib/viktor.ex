@@ -1,12 +1,16 @@
 defmodule Viktor do
-  alias Viktor.{Champion, ChampionMastery, CurrentGame, FeaturedGames, Game, League, Match, MatchList}
+  alias Viktor.Operation.{Champion, ChampionMastery, CurrentGame, FeaturedGames, Game, League, Match, MatchList, Stats, Summoner, Team}
   @moduledoc """
-  Viktor
+
+  Primary interface to the League of Legends API. For convenience's sake, endpoint methods may be called directly from
+  this module. In some cases, the method names aren't 1:1 (e.g. `Viktor.ranked_stats` delegates to
+  `Viktor.Operation.Stats.ranked`), so be sure to read the documentation.
 
   ## Examples
   ```elixir
   Viktor.start_link
   current_game = Viktor.current_game("na", 21066)
+  current_game_without_delegate = Viktor.Operation.CurrentGame.current_game("na", 21066)
   ```
   """
 
@@ -91,7 +95,7 @@ defmodule Viktor do
   top_10 = Viktor.top_champion_masteries("na", 21066, 10)
   ```
   """
-  defdelegate top_champion_masteries(region, summoner_id), to: ChampionMastery, as: :topchampions
+  defdelegate top_champion_masteries(region, summoner_id, count), to: ChampionMastery, as: :topchampions
 
   @doc """
   Get current game information for the given summoner ID.
@@ -194,7 +198,7 @@ defmodule Viktor do
   defdelegate match(region, match_id), to: Match
 
   @doc """
-  Retrieve match by match ID.
+  Retrieve match by match ID. Includes timeline if flag set to true.
 
   ## Examples
   ```elixir
@@ -203,8 +207,84 @@ defmodule Viktor do
   """
   defdelegate match(region, match_id, include_timeline), to: Match
 
+  @doc """
+  Retrieve match list by summoner ID.
+
+  ## Examples
+  ```elixir
+  match_list = Viktor.match_list("na", 21066)
+  ```
+  """
   defdelegate match_list(region, summoner_id), to: MatchList
+
+  @doc """
+  Retrieve match list by summoner ID and filter params as keywords. Available filters:
+
+  * `championIds` - Comma-separated list of champion IDs to use for fetching games.
+  * `rankedQueues` - Comma-separated list of ranked queue types to use for fetching games. Non-ranked queue types will be ignored.
+    * `[TEAM_BUILDER_DRAFT_RANKED_5x5,RANKED_SOLO_5x5,RANKED_TEAM_3x3,RANKED_TEAM_5x5]`
+  * `seasons` - Comma-separated list of seasons to use for fetching games.
+    * `[PRESEASON3,SEASON3,PRESEASON2014,SEASON2014,PRESEASON2015,SEASON2015,PRESEASON2016,SEASON2016]`
+  * `beginTime` - The begin time to use for fetching games specified as epoch milliseconds.
+  * `endTime` - The end time to use for fetching games specified as epoch milliseconds.
+  * `beginIndex` - The begin index to use for fetching games.
+  * `endIndex` - The end index to use for fetching games.
+
+  Per Riot: It is up to the caller to ensure that the combination of filter parameters provided is valid for the
+  requested summoner, otherwise, no matches may be returned. If either of the `beginTime` or `endTime` parameters is
+  set, they must both be set, although there is no maximum limit on their range. If the `beginTime` parameter is
+  specified on its own, `endTime` is assumed to be the current time. If the `endTime` parameter is specified on its own,
+  `beginTime` is assumed to be the start of the summoner's match history.
+
+  ## Examples
+  ```elixir
+  some_seasons = Viktor.match_list("na", 21066, [seasons: "SEASON2014,SEASON2015,SEASON2016" ])
+  some_ranked_queues = Viktor.match_list("na", 21066, [rankedQueues: "RANKED_SOLO_5x5,TEAM_BUILDER_DRAFT_RANKED_5x5" ])
+  combo = Viktor.match_list("na", 21066, [championIds: "7", seasons: "PRESEASON2015", beginIndex: 0, endIndex: 5])
+  ```
+  """
   defdelegate match_list(region, summoner_id, params), to: MatchList
 
+  @doc """
+  Get ranked stats by summoner ID for current season.
+
+  ```elixir
+  ranked = Viktor.ranked_stats("na", 21066)
+  ```
+  """
+  defdelegate ranked_stats(region, summoner_id), to: Stats, as: :ranked
+
+  @doc """
+  Get ranked stats by summoner ID and season.
+
+  ```elixir
+  season_3 = Viktor.ranked_stats("na", 21066, "SEASON3")
+  season_4 = Viktor.ranked_stats("na", 21066, "SEASON2014")
+  season_5 = Viktor.ranked_stats("na", 21066, "SEASON2015")
+  season_6 = Viktor.ranked_stats("na", 21066, "SEASON2016")
+  ```
+  """
+  defdelegate ranked_stats(region, summoner_id, season), to: Stats, as: :ranked
+
+  @doc """
+  Get player stats summaries by summoner ID for current season.
+
+  ```elixir
+  summary = Viktor.summary_stats("na", 21066)
+  ```
+  """
+  defdelegate summary_stats(region, summoner_id), to: Stats, as: :summary
+
+  @doc """
+  Get player stats summaries by summoner ID and season.
+
+  ```elixir
+  season_3 = Viktor.summary_stats("na", 21066, "SEASON3")
+  season_4 = Viktor.summary_stats("na", 21066, "SEASON2014")
+  season_5 = Viktor.summary_stats("na", 21066, "SEASON2015")
+  season_6 = Viktor.summary_stats("na", 21066, "SEASON2016")
+  ```
+  """
+  defdelegate summary_stats(region, summoner_id, season), to: Stats, as: :summary
 
 end

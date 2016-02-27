@@ -1,4 +1,4 @@
-defmodule Viktor.MatchList do
+defmodule Viktor.Operation.MatchList do
   import Viktor.Base
   @moduledoc false
 

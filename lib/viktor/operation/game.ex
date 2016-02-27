@@ -1,7 +1,5 @@
-defmodule Viktor.Game do
+defmodule Viktor.Operation.Game do
   import Viktor.Base
-  import Viktor.CurrentGame
-  import Viktor.FeaturedGames
 
   @moduledoc """
   Wrapper for Game endpoint.
@@ -18,8 +16,4 @@ defmodule Viktor.Game do
   def recent(region, summoner_id) do
     request(region, "/v1.3/game/by-summoner/#{summoner_id}/recent")
   end
-
-  def current(region, summoner_id), do: current_game(region, summoner_id)
-
-  def featured(region), do: featured_games(region)
 end

@@ -1,4 +1,4 @@
-defmodule Viktor.Stats do
+defmodule Viktor.Operation.Stats do
   import Viktor.Base
   @moduledoc false
 

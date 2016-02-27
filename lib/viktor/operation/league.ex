@@ -1,4 +1,4 @@
-defmodule Viktor.League do
+defmodule Viktor.Operation.League do
   import Viktor.Base
 
   @league_path "/v2.5/league"

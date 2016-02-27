@@ -1,4 +1,4 @@
-defmodule Viktor.CurrentGame do
+defmodule Viktor.Operation.CurrentGame do
   import Viktor.Base
   @moduledoc """
   Wrapper for Current Game endpoint.

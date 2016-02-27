@@ -1,4 +1,4 @@
-defmodule Viktor.Team do
+defmodule Viktor.Operation.Team do
   import Viktor.Base
   @moduledoc false
 

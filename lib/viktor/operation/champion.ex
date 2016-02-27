@@ -1,4 +1,4 @@
-defmodule Viktor.Champion do
+defmodule Viktor.Operation.Champion do
   import Viktor.Base
   @moduledoc """
   Wrapper for Champion endpoint.

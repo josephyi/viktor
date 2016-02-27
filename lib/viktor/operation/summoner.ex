@@ -1,4 +1,4 @@
-defmodule Viktor.Summoner do
+defmodule Viktor.Operation.Summoner do
   import Viktor.Base
 
   @summoner_path "/v1.4/summoner"
