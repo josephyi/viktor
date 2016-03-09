@@ -21,7 +21,7 @@ Add viktor to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:viktor, "~> 0.0.1"}]
+  [{:viktor, "~> 0.0.8"}]
 end
 ```
 
@@ -64,6 +64,8 @@ Viktor.start_link("whatever_key_rito_assigned_you")
 
 ## Examples
 
+I'm in the process of making this a little more pleasant by providing the functions off the root module. These examples will work, but see the [documentation] for details.
+
 ```elixir
 Viktor.start_link
 champion_list = Viktor.Champion.champions("na")
@@ -78,7 +80,15 @@ current_game = Viktor.CurrentGame.current_game("na", 21066)
 featured_games = Viktor.FeaturedGames.featured_game("na")
 ```
 
-That's about as far as I got!
+All that's left is the tournament endpoints!
 
+## Other API Libraries
+
+Be sure to check out the other libraries out there!
+
+[velkoz]
+
+[documentation]:https://hexdocs.pm/viktor/0.0.8/Viktor.html#content
+[velkoz]:https://github.com/Tim-Machine/velkoz
 [Agent]:http://elixir-lang.org/getting-started/mix-otp/agent.html
 [Riot Games Developer]:https://developer.riotgames.com/
