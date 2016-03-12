@@ -1,5 +1,5 @@
 defmodule Viktor do
-  alias Viktor.Operation.{Champion, ChampionMastery, CurrentGame, FeaturedGames, Game, League, Match, MatchList, Stats, Summoner, Team}
+  alias Viktor.Operation.{Champion, ChampionMastery, CurrentGame, FeaturedGames, Game, League, Match, MatchList, Stats, StaticData, Summoner, Team}
   @moduledoc """
 
   Primary interface to the League of Legends API. For convenience's sake, endpoint methods may be called directly from
@@ -14,10 +14,26 @@ defmodule Viktor do
   ```
   """
 
+  @doc """
+  Initialize with API Key set in `RIOT_API_KEY` environment variable.
+
+  ## Examples
+  ```elixir
+  Viktor.start_link("api_key_from_rito")
+  ```
+  """
   def start_link do
     start_link(Application.get_env(:viktor, :riot_api_key, System.get_env("RIOT_API_KEY")))
   end
 
+  @doc """
+  Initialize with API Key if it wasn't set in config or environment variable.
+
+  ## Examples
+  ```elixir
+  Viktor.start_link("api_key_from_rito")
+  ```
+  """
   def start_link(api_key) do
     Agent.start_link(fn -> api_key end, name: __MODULE__)
   end
@@ -50,11 +66,29 @@ defmodule Viktor do
   ## Examples
   All Champions
   ```elixir
-  all_champions = Viktor.champion("na")
+  all_champions = Viktor.champions("na")
+  %{"champions" => [%{"active" => true, "botEnabled" => false,
+       "botMmEnabled" => false, "freeToPlay" => false, "id" => 266,
+       "rankedPlayEnabled" => true},
+     %{"active" => true, "botEnabled" => false, "botMmEnabled" => true,
+       "freeToPlay" => false, "id" => 103, "rankedPlayEnabled" => true},
+     %{"active" => true, "botEnabled" => false, "botMmEnabled" => true,
+       "freeToPlay" => false, "id" => 84, "rankedPlayEnabled" => true}]
+       }%
+  ```
+  """
+  defdelegate champions(region), to: Champion, as: :champion
+
+  @doc """
+  Retrieve all champions or free champions if `free_to_play` is true.
+
+  ## Examples
+  All Champions
+  ```elixir
   free_champions = Viktor.champion("na", true)
   ```
   """
-  def champions(region, free_to_play), do: Champion.champion(region, free_to_play)
+  defdelegate champions(region, free_to_play), to: Champion, as: :champion
 
   @doc """
   Get a player's total champion mastery score, which is sum of individual champion mastery levels.
@@ -85,6 +119,8 @@ defmodule Viktor do
   ```
   """
   defdelegate champion_mastery(region, summoner_id, champion_id), to: ChampionMastery, as: :champion
+
+  defdelegate top_champion_masteries(region, summoner_id), to: ChampionMastery, as: :topchampions
 
   @doc """
   Get specified number of top champion mastery entries sorted by number of champion points descending.
@@ -208,6 +244,36 @@ defmodule Viktor do
   defdelegate match(region, match_id, include_timeline), to: Match
 
   @doc """
+  Retrieve match IDs by tournament code.
+
+  ## Examples
+  ```elixir
+  tournament_match_ids = Viktor.tournament_match_ids("na", "some_tourney_code")
+  ```
+  """
+  defdelegate tournament_match_ids(region, tournament_code), to: Match
+
+  @doc """
+  Retrieve match by match ID and tournament code.
+
+  ## Examples
+  ```elixir
+  tournament_match = Viktor.tournament_match_ids("na", 1234, "some_tourney_code")
+  ```
+  """
+  defdelegate tournament_match(region, match_id, tournament_code), to: Match
+
+  @doc """
+  Retrieve match by match ID and tournament code with timeline data if `include_timeline` is true.
+
+  ## Examples
+  ```elixir
+  tournament_match = Viktor.tournament_match_ids("na", 1234, "some_tourney_code", true)
+  ```
+  """
+  defdelegate tournament_match(region, match_id, tournament_code, include_timeline), to: Match
+
+  @doc """
   Retrieve match list by summoner ID.
 
   ## Examples
@@ -222,9 +288,9 @@ defmodule Viktor do
 
   * `championIds` - Comma-separated list of champion IDs to use for fetching games.
   * `rankedQueues` - Comma-separated list of ranked queue types to use for fetching games. Non-ranked queue types will be ignored.
-    * `[TEAM_BUILDER_DRAFT_RANKED_5x5,RANKED_SOLO_5x5,RANKED_TEAM_3x3,RANKED_TEAM_5x5]`
+      * `TEAM_BUILDER_DRAFT_RANKED_5x5,RANKED_SOLO_5x5,RANKED_TEAM_3x3,RANKED_TEAM_5x5`
   * `seasons` - Comma-separated list of seasons to use for fetching games.
-    * `[PRESEASON3,SEASON3,PRESEASON2014,SEASON2014,PRESEASON2015,SEASON2015,PRESEASON2016,SEASON2016]`
+      * `PRESEASON3,SEASON3,PRESEASON2014,SEASON2014,PRESEASON2015,SEASON2015,PRESEASON2016,SEASON2016`
   * `beginTime` - The begin time to use for fetching games specified as epoch milliseconds.
   * `endTime` - The end time to use for fetching games specified as epoch milliseconds.
   * `beginIndex` - The begin index to use for fetching games.
@@ -248,6 +314,7 @@ defmodule Viktor do
   @doc """
   Get ranked stats by summoner ID for current season.
 
+  ## Examples
   ```elixir
   ranked = Viktor.ranked_stats("na", 21066)
   ```
@@ -257,6 +324,7 @@ defmodule Viktor do
   @doc """
   Get ranked stats by summoner ID and season.
 
+  ## Examples
   ```elixir
   season_3 = Viktor.ranked_stats("na", 21066, "SEASON3")
   season_4 = Viktor.ranked_stats("na", 21066, "SEASON2014")
@@ -269,6 +337,7 @@ defmodule Viktor do
   @doc """
   Get player stats summaries by summoner ID for current season.
 
+  ## Examples
   ```elixir
   summary = Viktor.summary_stats("na", 21066)
   ```
@@ -278,6 +347,7 @@ defmodule Viktor do
   @doc """
   Get player stats summaries by summoner ID and season.
 
+  ## Examples
   ```elixir
   season_3 = Viktor.summary_stats("na", 21066, "SEASON3")
   season_4 = Viktor.summary_stats("na", 21066, "SEASON2014")
@@ -287,4 +357,30 @@ defmodule Viktor do
   """
   defdelegate summary_stats(region, summoner_id, season), to: Stats, as: :summary
 
+  @doc """
+  Retrieves champion list with default keys and values.
+
+  ## Examples
+  ```elixir
+  champions = Viktor.static_data_champions("na")
+  ```
+  """
+  defdelegate static_data_champion(region), to: StaticData, as: :champion
+
+  @doc """
+  Retrieves champion list using optional keywords to modify result:
+
+  * `locale` Locale code for returned data (e.g., en_US, es_ES). If not specified, the default locale for the region is used.
+  * `version` Data dragon version for returned data. If not specified, the latest version for the region is used. List of valid versions can be obtained from the /versions endpoint.
+  * `dataById` If specified as true, the returned data map will use the champions' IDs as the keys. If not specified or specified as false, the returned data map will use the champions' keys instead.
+  * `champData` Tags to return additional data. Only type, version, data, id, key, name, and title are returned by default if this parameter isn't specified. To return all additional data, use the tag 'all'.
+      * `all,allytips,altimages,blurb,enemytips,image,info,lore,partype,passive,recommended,skins,spells,stats,tags`
+  ## Examples
+  ```elixir
+  champions = Viktor.static_data_champions("na")
+  ```
+  """
+  defdelegate static_data_champion(region, params), to: StaticData, as: :champion
+
+  defdelegate static_data_champion_by_id(region, id, params), to: StaticData, as: :champion_by_id
 end

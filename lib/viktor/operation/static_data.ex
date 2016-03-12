@@ -2,16 +2,13 @@ defmodule Viktor.Operation.StaticData do
   import Viktor.Base
   @moduledoc false
 
-  def champion(region, locale \\ nil, arg2 \\ nil, arg3 \\ nil, arg4 \\ nil)
-
-  def champion(region, id, locale, version, champ_data) when is_integer(id) do
-    static_request(region, "/champion/#{id}", [locale: locale, version: version, champData: champ_data])
+  def champion(region, params \\ []) when is_list(params) do
+    static_request(region, "/champion", params)
   end
 
-  def champion(region, locale, version, data_by_id, champ_data)  do
-    static_request(region, "/champion", [locale: locale, version: version, dataById: data_by_id, champData: champ_data])
+  def champion_by_id(region, id, params \\ []) when is_integer(id) do
+    static_request(region, "/champion/#{id}", params)
   end
-
 
   def item(region, id, locale, version, item_data) when is_integer(id) do
     static_request(region, "/item/#{id}", [locale: locale, version: version, itemData: item_data])

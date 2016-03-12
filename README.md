@@ -68,19 +68,19 @@ I'm in the process of making this a little more pleasant by providing the functi
 
 ```elixir
 Viktor.start_link
-champion_list = Viktor.Champion.champions("na")
-champion_list_free_week = Viktor.Champion.champions("na", true)
-champion_by_id = Viktor.Champion.champions("na", 1)
-champion_mastery_score = Viktor.ChampionMastery.score("na", 21066)
-champion_mastery_champion = Viktor.ChampionMastery.champion("na", 21066, 1)
-champion_mastery_champions = Viktor.ChampionMastery.champions("na", 21066)
-champion_mastery_3_topchampions = Viktor.ChampionMastery.champions("na", 21066)
-champion_mastery_5_topchampions = Viktor.ChampionMastery.champions("na", 21066, 5)
-current_game = Viktor.CurrentGame.current_game("na", 21066)
-featured_games = Viktor.FeaturedGames.featured_game("na")
+champion_list = Viktor.champions("na")
+champion_list_free_week = Viktor.champions("na", true)
+champion_by_id = Viktor.champion("na", 1)
+champion_mastery_score = Viktor.mastery_score("na", 21066)
+champion_mastery_champion = Viktor.champion_mastery("na", 21066, 1)
+champion_mastery_champions = Viktor.champion_masteries("na", 21066)
+champion_mastery_3_topchampions = Viktor.top_champion_masteries("na", 21066)
+champion_mastery_5_topchampions = Viktor.top_champion_masteries("na", 21066, 5)
+current_game = Viktor.current_game("na", 21066)
+featured_games = Viktor.featured_games("na")
 ```
 
-All that's left is the tournament endpoints!
+All that's left are the tournament endpoints!
 
 ## Other API Libraries
 
