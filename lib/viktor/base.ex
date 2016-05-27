@@ -5,6 +5,7 @@ defmodule Viktor.Base do
             br: [region: "br", platform_id: "BR1", host: "br.api.pvp.net"],
             eune: [region: "eune", platform_id: "EUN1", host: "eune.api.pvp.net"],
             euw: [region: "euw", platform_id: "EUW1", host: "euw.api.pvp.net"],
+            jp: [region: "jp", platform_id: "JP1", host: "jp.api.pvp.net"],
             kr: [region: "kr", platform_id: "KR", host: "kr.api.pvp.net"],
             lan: [region: "lan", platform_id: "LA1", host: "lan.api.pvp.net"],
             las: [region: "las", platform_id: "LA2", host: "las.api.pvp.net"],
@@ -51,4 +52,3 @@ defmodule Viktor.Base do
   defp build_qs([]), do: ""
   defp build_qs(kvs), do: to_string('?' ++ URI.encode_query(kvs))
 end
-
