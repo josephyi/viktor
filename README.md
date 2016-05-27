@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/josephyi/viktor.svg?branch=master)](https://travis-ci.org/josephyi/viktor)
+[![Deps Status](https://beta.hexfaktor.org/badge/all/github/josephyi/viktor.svg)](https://beta.hexfaktor.org/github/josephyi/viktor)
 [![Inline docs](http://inch-ci.org/github/josephyi/viktor.svg?branch=master)](http://inch-ci.org/github/josephyi/viktor)
 
 # Viktor
