@@ -5,16 +5,12 @@ defmodule Viktor.Operation.Summoner do
 
   @moduledoc false
 
-  def by_account(region, account_ids) do
-    request(region, "#{@summoner_path}/by-account/#{account_ids}")
-  end
-
   def by_name(region, summoner_names) do
     request(region, "#{@summoner_path}/by-name/#{summoner_names}")
   end
 
   def by_summoner_ids(region, summoner_ids) do
-    request(region, "#{@summoner_path}/by-name/#{summoner_ids}")
+    request(region, "#{@summoner_path}/#{summoner_ids}")
   end
 
   def masteries(region, summoner_ids) do
