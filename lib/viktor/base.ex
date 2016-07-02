@@ -38,7 +38,7 @@ defmodule Viktor.Base do
      (regional_endpoint(region) <> path) |> add_params(params) |> get
   end
 
-  def get(url), do: HTTP.request!(:get, url, "", [], []) |> HTTP.process_response
+  def get(url), do: HTTP.request!(:get, url, "", [], [])
 
   def add_params(url, params, with_key \\ true) do
     if with_key do

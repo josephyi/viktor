@@ -3,8 +3,8 @@ defmodule Viktor.Mixfile do
 
   def project do
     [app: :viktor,
-     version: "0.1.1",
-     elixir: "~> 1.2",
+     version: "0.2.0",
+     elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps,
@@ -17,10 +17,10 @@ defmodule Viktor.Mixfile do
   end
 
   defp deps do
-    [ {:httpoison, "~> 0.8.0"},
-      {:poison, "~> 2.0"},
+    [ {:httpoison, "~> 0.9.0"},
+      {:poison, "~> 2.2"},
       {:inch_ex, only: :docs},
-      {:ex_doc, "~> 0.11", only: :dev},
+      {:ex_doc, "~> 0.12", only: :dev},
       {:earmark, "~> 0.2", only: :dev}
     ]
   end

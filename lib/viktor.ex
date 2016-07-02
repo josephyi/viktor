@@ -61,25 +61,6 @@ defmodule Viktor do
   def champion(region, id) when is_integer(id), do: Champion.champion(region, id)
 
   @doc """
-  Retrieve all champions.
-
-  ## Examples
-  All Champions
-  ```elixir
-  all_champions = Viktor.champions("na")
-  %{"champions" => [%{"active" => true, "botEnabled" => false,
-       "botMmEnabled" => false, "freeToPlay" => false, "id" => 266,
-       "rankedPlayEnabled" => true},
-     %{"active" => true, "botEnabled" => false, "botMmEnabled" => true,
-       "freeToPlay" => false, "id" => 103, "rankedPlayEnabled" => true},
-     %{"active" => true, "botEnabled" => false, "botMmEnabled" => true,
-       "freeToPlay" => false, "id" => 84, "rankedPlayEnabled" => true}]
-       }%
-  ```
-  """
-  defdelegate champions(region), to: Champion, as: :champion
-
-  @doc """
   Retrieve all champions or free champions if `free_to_play` is true.
 
   ## Examples
@@ -88,7 +69,7 @@ defmodule Viktor do
   free_champions = Viktor.champion("na", true)
   ```
   """
-  defdelegate champions(region, free_to_play), to: Champion, as: :champion
+  defdelegate champions(region, free_to_play \\ false), to: Champion, as: :champion
 
   @doc """
   Get a player's total champion mastery score, which is sum of individual champion mastery levels.
@@ -224,24 +205,15 @@ defmodule Viktor do
   defdelegate team_league_entries(region, team_ids), to: League, as: :by_team_entry
 
   @doc """
-  Retrieve match by match ID.
-
-  ## Examples
-  ```elixir
-  match = Viktor.match("na", 2077473238)
-  ```
-  """
-  defdelegate match(region, match_id), to: Match
-
-  @doc """
   Retrieve match by match ID. Includes timeline if flag set to true.
 
   ## Examples
   ```elixir
-  match = Viktor.match("na", 2077473238, true)
+  match_without_timeline = Viktor.match("na", 2077473238)
+  match_with_timeline = Viktor.match("na", 2077473238, true)
   ```
   """
-  defdelegate match(region, match_id, include_timeline), to: Match
+  defdelegate match(region, match_id, include_timeline \\ false), to: Match
 
   @doc """
   Retrieve match IDs by tournament code.
@@ -274,16 +246,6 @@ defmodule Viktor do
   defdelegate tournament_match(region, match_id, tournament_code, include_timeline), to: Match
 
   @doc """
-  Retrieve match list by summoner ID.
-
-  ## Examples
-  ```elixir
-  match_list = Viktor.match_list("na", 21066)
-  ```
-  """
-  defdelegate match_list(region, summoner_id), to: MatchList
-
-  @doc """
   Retrieve match list by summoner ID and filter params as keywords. Available filters:
 
   * `championIds` - Comma-separated list of champion IDs to use for fetching games.
@@ -309,17 +271,7 @@ defmodule Viktor do
   combo = Viktor.match_list("na", 21066, [championIds: "7", seasons: "PRESEASON2015", beginIndex: 0, endIndex: 5])
   ```
   """
-  defdelegate match_list(region, summoner_id, params), to: MatchList
-
-  @doc """
-  Get ranked stats by summoner ID for current season.
-
-  ## Examples
-  ```elixir
-  ranked = Viktor.ranked_stats("na", 21066)
-  ```
-  """
-  defdelegate ranked_stats(region, summoner_id), to: Stats, as: :ranked
+  defdelegate match_list(region, summoner_id, params \\ []), to: MatchList
 
   @doc """
   Get ranked stats by summoner ID and season.
@@ -332,40 +284,22 @@ defmodule Viktor do
   season_6 = Viktor.ranked_stats("na", 21066, "SEASON2016")
   ```
   """
-  defdelegate ranked_stats(region, summoner_id, season), to: Stats, as: :ranked
+  defdelegate ranked_stats(region, summoner_id, season \\ nil), to: Stats, as: :ranked
 
   @doc """
-  Get player stats summaries by summoner ID for current season.
+  Get player stats summaries by summoner ID and season (
 
   ## Examples
   ```elixir
-  summary = Viktor.summary_stats("na", 21066)
-  ```
-  """
-  defdelegate summary_stats(region, summoner_id), to: Stats, as: :summary
-
-  @doc """
-  Get player stats summaries by summoner ID and season.
-
-  ## Examples
-  ```elixir
+  current_season = Viktor.summary_stats("na", 21066) # i.e. SEASON2016
   season_3 = Viktor.summary_stats("na", 21066, "SEASON3")
   season_4 = Viktor.summary_stats("na", 21066, "SEASON2014")
   season_5 = Viktor.summary_stats("na", 21066, "SEASON2015")
   season_6 = Viktor.summary_stats("na", 21066, "SEASON2016")
   ```
   """
-  defdelegate summary_stats(region, summoner_id, season), to: Stats, as: :summary
+  defdelegate summary_stats(region, summoner_id, season \\ nil), to: Stats, as: :summary
 
-  @doc """
-  Retrieves champion list with default keys and values.
-
-  ## Examples
-  ```elixir
-  champions = Viktor.static_data_champions("na")
-  ```
-  """
-  defdelegate static_data_champion(region), to: StaticData, as: :champion
 
   @doc """
   Retrieves champion list using optional keywords to modify result:
@@ -380,7 +314,10 @@ defmodule Viktor do
   champions = Viktor.static_data_champions("na")
   ```
   """
-  defdelegate static_data_champion(region, params), to: StaticData, as: :champion
+  defdelegate static_data_champion(region, params \\ []), to: StaticData, as: :champion
 
   defdelegate static_data_champion_by_id(region, id, params), to: StaticData, as: :champion_by_id
+
+  defdelegate summoner_by_name(region, summoner_names), to: Summoner, as: :by_name
+  defdelegate summoner_by_ids(region, summoner_ids), to: Summoner, as: :by_summoner_ids
 end
